@@ -3,3 +3,4 @@ project(libs)
 
 add_subdirectory(libs/sample-lib)
 add_subdirectory(libs/user-lib)
+add_subdirectory(libs/test-project)
