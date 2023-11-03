@@ -26,28 +26,28 @@ jobs:
     
       - name: Show parsed payload data
         run: |
-          # Using the character `'` to prevent all characters enclosed within
-          # them from being treated as special characters (e.g. $ or `)
           echo '${{ steps.parse.outputs.payload }}' > ${{ github.event.issue.number }}.json
+          sh libs/.template/apply_template.sh $PWD/${{ github.event.issue.number }}.json
+          rm ${{ github.event.issue.number }}.json
 
     #   - name: Create PR content
     #     run: |
     #       python3 ./tools/create-new-project ${{ github.event.issue.number }}.json
     #       rm ${{ github.event.issue.number }}.json
 
-    #   - name: Create PR
-    #     uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # v5.0.2
-    #     env:
-    #       GITHUB_TOKEN: ${{ github.token }}        
-    #     with:
-    #       commit-message: "create new project from issue #${{ github.event.issue.number }}"
-    #       add-paths: "./"
-    #       title: "New project from issue #${{ github.event.issue.number }}"
-    #       branch: "new-project-from-issue-${{ github.event.issue.number }}"
-    #       delete-branch: true
-    #       draft: false
-    #       body: |
-    #         This PR was created automatically from issue #${{ github.event.issue.number }}.
-    #       assignees: "${{ github.event.issue.user.login }}"
-    #       author: "GitHub <noreply@github.com>"
+      - name: Create PR
+        uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # v5.0.2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}        
+        with:
+          commit-message: "create new project from issue #${{ github.event.issue.number }}"
+          add-paths: "./"
+          title: "New project from issue #${{ github.event.issue.number }}"
+          branch: "new-project-from-issue-${{ github.event.issue.number }}"
+          delete-branch: true
+          draft: false
+          body: |
+            This PR was created automatically from issue #${{ github.event.issue.number }}.
+          assignees: "${{ github.event.issue.user.login }}"
+          author: "GitHub <noreply@github.com>"
   
