@@ -1,0 +1,21 @@
+name: Create new a new library project
+description: Issue that triggers the creation of a new library project
+title: "[Project-Gen-Req]: Project Generation Request"
+labels: [Project Generation Request]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This template will create a new issue for the creation of a library project. Please fill in the following information:
+        
+  - type: input
+    id: project-name
+    attributes:
+      label: Project Name
+      description:        
+        The name of your library, which also serve as the name of the project folder in the repository. Use lower case and dashes instead of spaces.
+      placeholder: my-cool-library
+    validations:
+      required: true
+  
