@@ -7,7 +7,8 @@ on:
 
 jobs:
 
-    build:
+    build-all:
+        name: Build-All
         runs-on: ubuntu-latest
     
         steps:
