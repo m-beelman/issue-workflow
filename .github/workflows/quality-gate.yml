@@ -1,0 +1,25 @@
+name: C++ Compile Gate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+    build:
+        runs-on: ubuntu-latest
+    
+        steps:
+            - name: Checkout sources
+              uses: actions/checkout@v2
+            - name: Install dependencies
+              run: |
+                   sudo apt-get install -y cmake
+                   sudo apt-get install -y libboost-all-dev
+            - name: Build
+              run: |
+                   mkdir build
+                   cd build
+                   cmake ..
+                   make
