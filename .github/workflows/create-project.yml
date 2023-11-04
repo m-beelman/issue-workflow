@@ -33,7 +33,7 @@ jobs:
       - name: Create PR
         uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # v5.0.2
         env:
-          GITHUB_TOKEN: ${{ github.token }}        
+          GITHUB_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
         with:
           commit-message: "create new project from issue #${{ github.event.issue.number }}"
           add-paths: "./"
