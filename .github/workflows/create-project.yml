@@ -18,9 +18,9 @@ jobs:
         id: check-label
         run: |
           if [[ $(jq -r '.issue.labels[].name' $GITHUB_EVENT_PATH | grep -c 'Project Generation Request') -eq 0 ]]; then
-            echo "::set-output name=has-right-label::false"
+            echo "has-right-label=false" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=has-right-label::true"
+            echo "has-right-label=true" >> $GITHUB_OUTPUT
           fi
       - name: checkout      
         if: steps.check-label.outputs.has-right-label == 'true'
