@@ -5,6 +5,7 @@ on:
   issues:
     types: [opened]
 
+
 jobs:
   create-project:
     # The type of runner that the job will run on
@@ -13,24 +14,36 @@ jobs:
       GH_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
     steps:
-      - name: checkout
+      - name: Check if new issue has a specific label and if stop the workflow
+        id: check-label
+        run: |
+          if [[ $(jq -r '.issue.labels[].name' $GITHUB_EVENT_PATH | grep -c 'Project Generation Request') -eq 0 ]]; then
+            echo "::set-output name=has-right-label::false"
+          else
+            echo "::set-output name=has-right-label::true"
+          fi
+      - name: checkout      
+        if: steps.check-label.outputs.has-right-label == 'true'
         uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
         with:
           fetch-depth: 0
 
       - name: Parse issue
+        if: steps.check-label.outputs.has-right-label == 'true'
         id: parse
         uses: onmax/issue-form-parser@e417bc7eb2633f3279b32c15301f256e85293d08 # v1.4
         with:
           issue_number: ${{ github.event.issue.number }}
     
       - name: Show parsed payload data
+        if: steps.check-label.outputs.has-right-label == 'true'
         run: |
           echo '${{ steps.parse.outputs.payload }}' > ${{ github.event.issue.number }}.json
           sh libs/.template/apply_template.sh $PWD/${{ github.event.issue.number }}.json
           rm ${{ github.event.issue.number }}.json
 
       - name: Create PR
+        if: steps.check-label.outputs.has-right-label == 'true'
         uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # v5.0.2
         with:
           token: ${{ secrets.REPO_SCOPED_TOKEN }}
